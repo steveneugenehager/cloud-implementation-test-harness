@@ -8,6 +8,9 @@
 #   TERRAFORM_VERSION=1.13.3 ./setup.sh  # pin terraform to a specific release
 #
 # Idempotent: safe to re-run; steps that are already done are skipped.
+#
+# Change History
+# 2026-10-07 Steve Hager - v1.0 Added change history comments.
 
 set -euo pipefail
 
