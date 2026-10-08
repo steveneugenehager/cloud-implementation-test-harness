@@ -12,6 +12,7 @@
 # Change History
 # 2026-10-07 Steve Hager - v1.0 Added change history comments.
 # 2026-10-07 Steve Hager - v1.1 Adding ~/.vimrc edit (set number).
+# 2026-10-08 Steve Hager - v1.2 Adding ~/.basc edit (alias).
 
 set -euo pipefail
 
@@ -138,6 +139,10 @@ configure_vim() {
   log "Configuring vim"
   ensure_line 'set number' "$HOME/.vimrc"
 }
+configure_bash() {
+  log "Configuring bash"
+  ensure_line 'alias ll="ls -lAhF"' "$HOME/.bashrc"
+}
 # ----------------------------------------------------------------------------
 main() {
   require_debian_family
@@ -145,6 +150,7 @@ main() {
   install_gcloud
   install_terraform
   configure_vim
+  configure_bash
 
   log "Done. Next: gcloud auth login (see README)."
 }
