@@ -11,6 +11,7 @@
 #
 # Change History
 # 2026-10-07 Steve Hager - v1.0 Added change history comments.
+# 2026-10-07 Steve Hager - v1.1 Adding ~/.vimrc edit (set number).
 
 set -euo pipefail
 
@@ -42,6 +43,17 @@ require_debian_family() {
   fi
 }
 
+# Append a line to a file unless that exact line is already there.
+ensure_line() {
+  local line="$1" file="$2"
+  touch "$file"
+  if grep -qxF -- "$line" "$file"; then
+    skip "$file already has: $line"
+  else
+    printf '%s\n' "$line" >> "$file"
+    printf '    [add]  %s -> %s\n' "$line" "$file"
+  fi
+}
 # ----------------------------------------------------------------------------
 # Steps
 # ----------------------------------------------------------------------------
@@ -122,15 +134,17 @@ install_terraform() {
 
   terraform -version | head -n 1
 }
-
-# TODO: setup_python_venv (follow-on/00-identity-seed)
-
+configure_vim() {
+  log "Configuring vim"
+  ensure_line 'set number' "$HOME/.vimrc"
+}
 # ----------------------------------------------------------------------------
 main() {
   require_debian_family
   install_base_packages
   install_gcloud
   install_terraform
+  configure_vim
 
   log "Done. Next: gcloud auth login (see README)."
 }
