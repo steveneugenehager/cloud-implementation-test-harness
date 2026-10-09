@@ -13,6 +13,7 @@
 # 2026-10-07 Steve Hager - v1.0 Added change history comments.
 # 2026-10-07 Steve Hager - v1.1 Adding ~/.vimrc edit (set number).
 # 2026-10-08 Steve Hager - v1.2 Adding ~/.basc edit (alias).
+# 2026-10-09 Steve Hager - v1.3 Adding git config for repos shared with Windows on /mnt/c.
 
 set -euo pipefail
 
@@ -143,6 +144,12 @@ configure_bash() {
   log "Configuring bash"
   ensure_line 'alias ll="ls -lAhF"' "$HOME/.bashrc"
 }
+configure_git() {
+  log "Configuring git"
+  # Repos are cloned on Windows and used from WSL via /mnt/c.
+  git config --global core.autocrlf true   # match the Windows clone's CRLF line endings
+  git config --global core.fileMode false  # /mnt/c reports every file as executable
+}
 # ----------------------------------------------------------------------------
 main() {
   require_debian_family
@@ -151,6 +158,7 @@ main() {
   install_terraform
   configure_vim
   configure_bash
+  configure_git
 
   log "Done. Next: gcloud auth login (see README)."
 }
